@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Deutsch üben</title>
+<style>
+  :root { --ink:#1a1a1a; --bg:#fafaf7; --card:#fff; --line:#d9d9d2; --accent:#2b5fd9; --ok:#1a7f37; --okbg:#e6f4ea; --bad:#b42318; --badbg:#fdecea; --muted:#555; }
+  * { box-sizing: border-box; }
+  body { margin:0; font:18px/1.5 system-ui,-apple-system,sans-serif; color:var(--ink); background:var(--bg); }
+  nav { display:flex; gap:8px; padding:12px 16px; border-bottom:1px solid var(--line); background:var(--card); position:sticky; top:0; z-index:2; }
+  nav button { font:inherit; padding:8px 16px; border:1px solid var(--line); border-radius:8px; background:var(--card); cursor:pointer; }
+  nav button.on { background:var(--accent); color:#fff; border-color:var(--accent); }
+  main { max-width:820px; margin:0 auto; padding:20px 16px 80px; }
+  h1 { font-size:28px; margin:8px 0 4px; } h2 { font-size:21px; margin:32px 0 8px; } h4 { margin:20px 0 4px; }
+  table { width:100%; border-collapse:collapse; background:var(--card); margin:8px 0 16px; font-size:16px; }
+  th, td { border:1px solid var(--line); padding:6px 10px; text-align:left; vertical-align:top; }
+  th { background:#f0f0ea; }
+  .en { color:var(--muted); font-weight:400; }
+  .ex { margin:6px 0; }
+  .box { background:var(--card); border:1px solid var(--line); border-left:5px solid var(--accent); padding:4px 16px; border-radius:8px; margin:12px 0; }
+  .modes { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:10px; margin:12px 0; }
+  .modes button { text-align:left; padding:14px; font:inherit; border:1px solid var(--line); border-radius:10px; background:var(--card); cursor:pointer; }
+  .modes button:hover { border-color:var(--accent); } small { display:block; color:var(--muted); font-size:14px; }
+  .topics { display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:10px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:12px 14px; display:flex; flex-direction:column; gap:2px; }
+  .row { display:flex; gap:8px; margin-top:8px; }
+  .chips { display:flex; flex-wrap:wrap; gap:6px; } .chips a { font-size:14px; padding:2px 10px; border:1px solid var(--line); border-radius:12px; text-decoration:none; color:var(--ink); background:var(--card); }
+  button.small { font:inherit; font-size:15px; padding:6px 14px; border:1px solid var(--accent); border-radius:8px; background:var(--accent); color:#fff; cursor:pointer; }
+  button.ghost { background:var(--card); color:var(--accent); border:1px solid var(--accent); font:inherit; padding:8px 16px; border-radius:8px; cursor:pointer; }
+  button.small.ghost { font-size:15px; padding:6px 14px; } button.danger { color:var(--bad); border-color:var(--bad); }
+  .bar { height:8px; background:var(--line); border-radius:4px; overflow:hidden; margin:8px 0 4px; }
+  .bar i { display:block; height:100%; background:var(--accent); }
+  .meta { display:flex; justify-content:space-between; gap:8px; color:var(--muted); font-size:15px; flex-wrap:wrap; }
+  .ask { margin-top:20px; color:var(--muted); font-size:16px; }
+  .q { font-size:26px; margin:8px 0 2px; line-height:1.35; }
+  .q mark { background:#ffe58a; padding:0 4px; border-radius:4px; }
+  .trans { margin-bottom:12px; font-size:18px; }
+  .opts { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:10px; margin-top:12px; }
+  .opts button { font:inherit; font-size:19px; padding:14px; border:2px solid var(--line); border-radius:10px; background:var(--card); cursor:pointer; text-align:left; }
+  .opts button:hover:not(:disabled) { border-color:var(--accent); }
+  .opts button.ok { border-color:var(--ok); background:var(--okbg); }
+  .opts button.bad { border-color:var(--bad); background:var(--badbg); }
+  .opts kbd { color:#777; font:14px monospace; margin-right:8px; }
+  .fb { margin-top:16px; padding:14px 16px; border-radius:10px; }
+  .fb.ok { background:var(--okbg); } .fb.bad { background:var(--badbg); }
+  details.lesson { margin-top:12px; background:var(--card); border:1px solid var(--line); border-radius:10px; padding:8px 16px; }
+  details.lesson summary { cursor:pointer; font-weight:600; }
+  .next { margin:12px 8px 0 0; font:inherit; padding:10px 22px; border:1px solid var(--accent); border-radius:8px; background:var(--accent); color:#fff; cursor:pointer; }
+  .next.ghost { background:var(--card); color:var(--accent); }
+  .tag { display:inline-block; font-size:13px; background:#eee; border-radius:6px; padding:1px 8px; margin-left:6px; color:var(--ink); }
+  .tiles { display:flex; gap:10px; flex-wrap:wrap; margin:12px 0; }
+  .tiles div { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:10px 18px; display:flex; flex-direction:column; }
+  .tiles b { font-size:26px; } .tiles span { color:var(--muted); font-size:14px; }
+  textarea { width:100%; margin-top:12px; font:14px/1.4 ui-monospace,monospace; padding:10px; border:1px solid var(--line); border-radius:8px; }
+  @media print {
+    nav, .noprint, #practice, #notes, #range, label { display:none !important; }
+    #progress { display:block !important; } body { font-size:12pt; background:#fff; }
+  }
+</style>
+</head>
+<body>
+<nav>
+  <button data-act="tab" data-tab="practice" class="on">Üben <span class="en">(practice)</span></button>
+  <button data-act="tab" data-tab="notes">Notizen <span class="en">(notes)</span></button>
+  <button data-act="tab" data-tab="progress">Fortschritt <span class="en">(progress)</span></button>
+</nav>
+<main id="practice"><div id="menu"></div><div id="round" hidden></div></main>
+<main id="notes" hidden></main>
+<main id="progress" hidden></main>
+<script src="data/base.js"></script>
+<script src="data/verbs.js"></script>
+<script src="data/cases.js"></script>
+<script src="data/review.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
