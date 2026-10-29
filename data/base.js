@@ -1,4 +1,6 @@
 const TOPICS = [];
+const WORDS = {};
+const G_WORDS = "Vocabulary (Wortschatz)";
 const G_VERBS = "Verbs and tenses (Verben und Zeiten)";
 const G_CASES = "Cases and prepositions (Fälle und Präpositionen)";
 const G_REVIEW = "Review (Wiederholung)";

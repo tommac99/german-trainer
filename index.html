@@ -8,7 +8,7 @@
   :root { --ink:#1a1a1a; --bg:#fafaf7; --card:#fff; --line:#d9d9d2; --accent:#2b5fd9; --ok:#1a7f37; --okbg:#e6f4ea; --bad:#b42318; --badbg:#fdecea; --muted:#555; }
   * { box-sizing: border-box; }
   body { margin:0; font:18px/1.5 system-ui,-apple-system,sans-serif; color:var(--ink); background:var(--bg); }
-  nav { display:flex; gap:8px; padding:12px 16px; border-bottom:1px solid var(--line); background:var(--card); position:sticky; top:0; z-index:2; }
+  nav { display:flex; flex-wrap:wrap; gap:8px; padding:12px 16px; border-bottom:1px solid var(--line); background:var(--card); position:sticky; top:0; z-index:2; }
   nav button { font:inherit; padding:8px 16px; border:1px solid var(--line); border-radius:8px; background:var(--card); cursor:pointer; }
   nav button.on { background:var(--accent); color:#fff; border-color:var(--accent); }
   main { max-width:820px; margin:0 auto; padding:20px 16px 80px; }
@@ -52,9 +52,11 @@
   .tiles { display:flex; gap:10px; flex-wrap:wrap; margin:12px 0; }
   .tiles div { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:10px 18px; display:flex; flex-direction:column; }
   .tiles b { font-size:26px; } .tiles span { color:var(--muted); font-size:14px; }
+  .words details, .words .w { border-bottom:1px solid var(--line); padding:6px 0; } .words summary { cursor:pointer; }
+  input, select { font:inherit; font-size:16px; padding:6px 10px; border:1px solid var(--line); border-radius:8px; }
   textarea { width:100%; margin-top:12px; font:14px/1.4 ui-monospace,monospace; padding:10px; border:1px solid var(--line); border-radius:8px; }
   @media print {
-    nav, .noprint, #practice, #notes, #range, label { display:none !important; }
+    nav, .noprint, #practice, #notes, #words, #range, label { display:none !important; }
     #progress { display:block !important; } body { font-size:12pt; background:#fff; }
   }
 </style>
@@ -62,16 +64,23 @@
 <body>
 <nav>
   <button data-act="tab" data-tab="practice" class="on">Üben <span class="en">(practice)</span></button>
+  <button data-act="tab" data-tab="words">Wörter <span class="en">(words)</span></button>
   <button data-act="tab" data-tab="notes">Notizen <span class="en">(notes)</span></button>
   <button data-act="tab" data-tab="progress">Fortschritt <span class="en">(progress)</span></button>
 </nav>
 <main id="practice"><div id="menu"></div><div id="round" hidden></div></main>
+<main id="words" hidden></main>
 <main id="notes" hidden></main>
 <main id="progress" hidden></main>
 <script src="data/base.js"></script>
 <script src="data/verbs.js"></script>
 <script src="data/cases.js"></script>
 <script src="data/review.js"></script>
+<script src="data/words-a1.js"></script>
+<script src="data/words-a2.js"></script>
+<script src="data/words-b1.js"></script>
+<script src="data/words-b2.js"></script>
+<script src="vocab.js"></script>
 <script src="app.js"></script>
 </body>
 </html>
