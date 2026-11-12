@@ -1,3 +1,13 @@
+const ART_TABLES = `<h4>How the article changes with gender</h4>
+   ${TBL(["der, die, das", "Maskulin", "Feminin", "Neutrum", "Plural"], [
+     ["<b class=\"cN\">Nominativ</b> Wer/was?", "der", "die", "das", "die"],
+     ["<b class=\"cA\">Akkusativ</b> Wen/was?", "<b class=\"cA\">den</b>", "die", "das", "die"],
+     ["<b class=\"cD\">Dativ</b> Wem?", "<b class=\"cD\">dem</b>", "<b class=\"cD\">der</b>", "<b class=\"cD\">dem</b>", "<b class=\"cD\">den</b> (+n on the noun)"]])}
+   ${TBL(["ein, mein, kein", "Maskulin", "Feminin", "Neutrum", "Plural"], [
+     ["<b class=\"cN\">Nominativ</b> Wer/was?", "ein", "eine", "ein", "keine"],
+     ["<b class=\"cA\">Akkusativ</b> Wen/was?", "<b class=\"cA\">einen</b>", "eine", "ein", "keine"],
+     ["<b class=\"cD\">Dativ</b> Wem?", "<b class=\"cD\">einem</b>", "<b class=\"cD\">einer</b>", "<b class=\"cD\">einem</b>", "<b class=\"cD\">keinen</b> (+n on the noun)"]])}
+   <p>Only the <b>masculine</b> changes from Nominativ to Akkusativ (der to den, ein to einen). In the Dativ every gender changes.</p>`;
 T("dativobjekt", G_LATEST, "Das indirekte Objekt: Wem?", "the indirect object (Dativ) and when the rule does not apply",
   `<p>Ask <b>Wem?</b> (to/for whom?) to find the <b>indirekte Objekt</b>. It stands in the <b>Dativ</b>. Ask <b>Wen oder was?</b> to find the <b>direkte Objekt</b>, which stands in the <b>Akkusativ</b>. Four cases where the Wem? rule does not work: pure Dativ verbs, verbs that force Akkusativ for a person, prepositional objects, reflexive verbs.</p>`,
   `${E("Sascha bringt Oma schöne Blumen.", "Sascha brings grandma nice flowers.")}
@@ -76,10 +86,9 @@ T("verb-praep", G_LATEST, "Verben mit Präposition", "verbs with a fixed preposi
   ], "Pick the preposition or the case.");
 
 T("dem-den", G_LATEST, "dem oder den? Artikel im Dativ und Akkusativ", "definite, indefinite and possessive articles",
-  `<p>First ask: <b>Wem?</b> Dativ. <b>Wen oder was?</b> Akkusativ. Then pick the article for the gender. Only the <b>masculine</b> shows a clear difference with all three kinds of article: <i>dem / den</i>, <i>einem / einen</i>, <i>meinem / meinen</i>. Feminine Akkusativ stays <i>die / eine / meine</i>, feminine Dativ is <i>der / einer / meiner</i>.</p>`,
-  `${TBL(["", "Maskulin", "Feminin", "Neutrum"], [
-     ["Akkusativ (Wen/was?)", "<b>den</b> / <b>einen</b> / <b>meinen</b>", "die / eine / meine", "das / ein / mein"],
-     ["Dativ (Wem?)", "<b>dem</b> / <b>einem</b> / <b>meinem</b>", "<b>der</b> / <b>einer</b> / <b>meiner</b>", "<b>dem</b> / <b>einem</b> / <b>meinem</b>"]])}
+  `<p>First ask: <b>Wem?</b> Dativ. <b>Wen oder was?</b> Akkusativ. Then pick the article for the gender. Only the <b>masculine</b> shows a clear difference with all three kinds of article: <i>dem / den</i>, <i>einem / einen</i>, <i>meinem / meinen</i>. Feminine Akkusativ stays <i>die / eine / meine</i>, feminine Dativ is <i>der / einer / meiner</i>.</p>
+   ${ART_TABLES}`,
+  `${ART_TABLES}
    ${E("Ich helfe dem Mann. WEM?", "I help the man. (Dativ: helfen)")}
    ${E("Ich sehe den Hund.", "I see the dog. (Akkusativ: sehen)")}
    ${E("Wir danken den Lehrern.", "We thank the teachers. (Dativ plural: den, and -n on the noun)")}
@@ -107,7 +116,8 @@ T("dem-den", G_LATEST, "dem oder den? Artikel im Dativ und Akkusativ", "definite
 
 T("endungen-da", G_LATEST, "Adjektivendungen im Dativ und Akkusativ", "adjective endings after ein, with and without prepositions",
   `<p>After <b>ein, mein, kein</b>: <b>-en</b> in the whole Dativ (einem alten, einer alten) and in the masculine Akkusativ (einen alten). <b>-e</b> in the feminine Akkusativ (eine alte). <b>-es</b> in the neuter Akkusativ (ein altes).</p>
-   <p>With a preposition, first decide the case. <b>Wechselpräpositionen</b> (in, auf, an, über, unter, vor, hinter, neben, zwischen): <b>Wo?</b> = Dativ, <b>Wohin?</b> = Akkusativ. <b>Always Akkusativ:</b> für, durch, ohne, gegen, um. <b>Always Dativ:</b> mit, von, zu, bei, aus, nach, seit.</p>`,
+   <p>With a preposition, first decide the case. <b>Wechselpräpositionen</b> (in, auf, an, über, unter, vor, hinter, neben, zwischen): <b>Wo?</b> = Dativ, <b>Wohin?</b> = Akkusativ. <b>Always Akkusativ:</b> für, durch, ohne, gegen, um. <b>Always Dativ:</b> mit, von, zu, bei, aus, nach, seit.</p>
+   ${ART_TABLES}`,
   `${TBL(["", "Maskulin", "Feminin", "Neutrum"], [
      ["Akkusativ", "einen alt<b>en</b> Mann", "eine alt<b>e</b> Frau", "ein alt<b>es</b> Kind"],
      ["Dativ", "einem alt<b>en</b> Mann", "einer alt<b>en</b> Frau", "einem alt<b>en</b> Kind"]])}
