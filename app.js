@@ -54,7 +54,45 @@ function topicStats(log) {
   return s;
 }
 
-let deck, idx, shown, answered, tipUsed, firstTryRight, firstTryTotal, streak, mode, roundMisses;
+const GENDERS = { der: ["m", "maskulin"], die: ["f", "feminin"], das: ["n", "neutral"] };
+const COLUMN_KEY = { maskulin: "m", feminin: "f", neutrum: "n", plural: "p" };
+const ARTICLE_ANSWER = /^(d(er|ie|as|en|em)|(k?ein|mein|dein|sein|ihr|unser|euer)(e|er|em|en|es)?|-e[rsn]?)(,|\s|$)/;
+
+const nounInfo = (word) => NOUN_ART[word] || NOUN_PLURAL[word] || NOUN_PLURAL[word.replace(/n$/, "")];
+
+function questionNouns(q) {
+  const find = (s) => (s.match(/[A-ZÄÖÜ][A-Za-zÄÖÜäöüß]+/g) || []).map((w) => ({ w, n: nounInfo(w) })).filter((x) => x.n);
+  const gap = q.indexOf("___");
+  const after = gap < 0 ? [] : find(q.slice(gap));
+  return [...new Map((after.length ? after : find(q)).map((x) => [x.w, x])).values()].slice(0, 2);
+}
+
+const nounKey = ({ n }) => (n.plural ? "p" : GENDERS[n.art][0]);
+
+function genusStrip(nouns) {
+  const chip = (x) => {
+    const k = nounKey(x);
+    const label = k === "p" ? `Plural von ${x.n.art} ${x.n.base}` : GENDERS[x.n.art][1];
+    return `<span class="gchip g-${k}"><b>${k === "p" ? "die" : x.n.art}</b> ${k === "p" ? x.n.plural : x.n.base} <i>${label}</i></span> <span class="en">${esc(x.n.en)}</span>`;
+  };
+  return nouns.length ? `<div class="genus"><span class="en">Genus (gender):</span> ${nouns.map(chip).join(" ")}</div>` : "";
+}
+
+function markGenders(root, keys) {
+  root.querySelectorAll("table").forEach((t) => {
+    [...t.rows[0].cells].forEach((h, c) => {
+      const k = COLUMN_KEY[h.textContent.trim().toLowerCase()];
+      if (keys.includes(k)) [...t.rows].forEach((r) => r.cells[c]?.classList.add("gcol", "g-" + k));
+    });
+  });
+}
+
+const conjugations = (text) => {
+  const t = verbTables(text);
+  return t ? `<details class="conj"><summary>Verb forms (Konjugation)</summary>${t}</details>` : "";
+};
+
+let genders, deck, idx, shown, answered, tipUsed, firstTryRight, firstTryTotal, streak, mode, roundMisses;
 
 function show(tab) {
   document.querySelectorAll("main").forEach((m) => (m.hidden = m.id !== tab));
@@ -132,17 +170,23 @@ function render() {
   answered = false;
   tipUsed = false;
   shown = shuffle(item.opts);
+  const nouns = ARTICLE_ANSWER.test(item.a) ? questionNouns(item.q) : [];
+  genders = nouns.map(nounKey);
   $("#round").innerHTML = `
     <div class="bar"><i style="width:${Math.round((idx / deck.length) * 100)}%"></i></div>
     <div class="meta"><span>${idx + 1} / ${deck.length} <span class="tag">${topic.de}</span>${item.retry ? '<span class="tag">Wiederholung (second try)</span>' : ""}</span><span>Serie (streak): ${streak}</span></div>
     ${item.ask || topic.ask ? `<div class="ask">${esc(item.ask || topic.ask)}</div>` : ""}
     <div class="q">${hl(item.q)}</div>
     ${item.en ? `<div class="en trans">(${esc(item.en)})</div>` : ""}
+    ${genusStrip(nouns)}
     <button class="ghost" id="tipBtn" data-act="tip">Show rules or tips (H)</button>
-    <div class="box" id="tip" hidden>${item.tip || topic.tip + verbTables(item.q + " " + item.a)}${item.h ? `<p><b>Hint:</b> ${esc(item.h)}</p>` : ""}</div>
+    <aside class="side">
+      <div class="box" id="tip" hidden>${item.tip || topic.tip + conjugations(item.q + " " + item.a)}${item.h ? `<p><b>Hint:</b> ${esc(item.h)}</p>` : ""}</div>
+      <div id="fb"></div>
+    </aside>
     <div class="opts">${shown.map((o, i) => `<button data-act="pick" data-i="${i}"><kbd>${i + 1}</kbd>${esc(o)}</button>`).join("")}</div>
-    <div id="fb"></div>
     <p><button class="small ghost" data-act="home">Back to menu</button></p>`;
+  markGenders($("#tip"), genders);
 }
 
 function toggleTip() {
@@ -180,9 +224,11 @@ function answer(i) {
   const topic = BY_ID[item.topic];
   $("#fb").innerHTML = `
     <div class="fb ${ok ? "ok" : "bad"}"><b>${ok ? "✓ Richtig (correct)" : `✗ Nicht ganz (not quite). Correct: ${esc(item.a)}`}</b><br>${esc(item.why)}</div>
-    ${ok ? "" : `<details class="lesson" open><summary>Lesson: ${topic.de} <span class="en">(${topic.en})</span></summary>${item.lesson || topic.lesson + verbTables(item.q + " " + item.a)}</details>`}
-    <button class="next" data-act="next" id="next">Weiter (next, Enter)</button>`;
-  $("#next").focus();
+    <button class="next" data-act="next" id="next">Weiter (next, Enter)</button>
+    ${ok ? "" : `<details class="lesson" open><summary>Lesson: ${topic.de} <span class="en">(${topic.en})</span></summary>${item.lesson || topic.lesson + verbTables(item.q + " " + item.a)}</details>`}`;
+  markGenders($("#fb"), genders);
+  $("#next").focus({ preventScroll: true });
+  $("#fb").scrollIntoView({ block: "nearest", behavior: "smooth" });
 }
 
 function finish() {

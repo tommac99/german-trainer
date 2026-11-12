@@ -1339,4 +1339,7 @@ ungesund | unhealthy
 ungerecht | unfair
 unsicher | insecure, unsure
 unbekannt | unknown
+der Plan | die Pläne | plan
+das Projekt | die Projekte | project
+der Lärm |  | noise
 `;

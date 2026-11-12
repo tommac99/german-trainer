@@ -40,6 +40,14 @@ LEVELS.forEach((level) => (WORDS[level] || "").trim().split("\n").map(parseWord(
   VOCAB.push(w);
 }));
 const VERBS = VOCAB.filter((w) => w.type === "verb");
+const NOUN_ART = {};
+const NOUN_PLURAL = {};
+VOCAB.filter((w) => w.type === "noun").forEach((w) => {
+  const [art, ...rest] = w.de.split(" ");
+  const base = rest.join(" ");
+  NOUN_ART[base] ||= { art, base, en: w.en };
+  if (w.pl) NOUN_PLURAL[w.pl.replace(/^die /, "")] ||= { art, base, en: w.en, plural: w.pl.replace(/^die /, "") };
+});
 
 function presentForms(base, er) {
   if (IRREGULAR[base]) return IRREGULAR[base].split(" ");
