@@ -3,6 +3,7 @@ const WORDS = {};
 const G_WORDS = "Vocabulary (Wortschatz)";
 const G_VERBS = "Verbs and tenses (Verben und Zeiten)";
 const G_CASES = "Cases and prepositions (Fälle und Präpositionen)";
+const G_LATEST = "Latest lesson (Letzte Stunde): Dativ oder Akkusativ";
 const G_REVIEW = "Review (Wiederholung)";
 const CASES = ["Nominativ", "Akkusativ", "Dativ", "Genitiv"];
 const PERSONS = ["ich", "du", "er/sie/es", "wir", "ihr", "sie/Sie"];
